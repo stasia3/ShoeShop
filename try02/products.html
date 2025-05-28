@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="header bg-white py-4">
+        <div class="container flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-gray-800">Shoes</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="index.html" class="text-blue-500 hover:text-blue-700">Home</a></li>
+                    <li><a href="products.html" class="text-blue-500 hover:text-blue-700">Products</a></li>
+                     <li><a href="login.html" class="text-blue-500 hover:text-blue-700">Login</a></li>
+                    <li><a href="register.html" class="text-blue-500 hover:text-blue-700">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-8 flex flex-wrap lg:flex-nowrap gap-8">
+        <aside class="w-full lg:w-1/4">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-lg font-semibold mb-4 text-gray-800">Filter by Category</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Men's</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Women's</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Kids</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Sports</a></li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4 text-gray-800">Filter by Price</h2>
+                 <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Under $50</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">$50 - $100</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">$100 - $200</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Over $200</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="w-full lg:w-3/4">
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                <input type="text" placeholder="Search products..." class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200 focus:border-blue-300" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Product 1</h3>
+                    <p class="text-gray-600 mb-2">Description of product 1.</p>
+                    <a href="product_details.html?id=1" class="text-blue-500 hover:text-blue-700">View Details</a>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Product 2</h3>
+                    <p class="text-gray-600 mb-2">Description of product 2.</p>
+                    <a href="product_details.html?id=2" class="text-blue-500 hover:text-blue-700">View Details</a>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Product 3</h3>
+                    <p class="text-gray-600 mb-2">Description of product 3.</p>
+                    <a href="product_details.html?id=3" class="text-blue-500 hover:text-blue-700">View Details</a>
+                </div>
+            </div>
+             <div class="mt-8 flex justify-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="flex items-center -space-x-px h-8 text-sm">
+                        <li>
+                            <a href="#" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Previous</span>
+                                <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Next</span>
+                                 <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-200 py-4 mt-8">
+        <div class="container text-center text-gray-600">
+            <p>&copy; 2024 My Shoe Store</p>
+        </div>
+    </footer>
+</body>
+</html>
