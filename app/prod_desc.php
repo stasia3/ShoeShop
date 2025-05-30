@@ -1,18 +1,50 @@
 <?php
     include_once '../db/Database.php';
     include_once '../db/Produs.php';
+    include_once '../db/Img.php';
+    include_once '../db/Marime.php';
+    include_once '../db/Culoare.php';
     session_start();
 
     $database = new Database();
     $db = $database->getConnection();
     $prod_op = new ProdusDao($db);
-
+    $img = new ImgDao($db);
+    $marime = new MarimeDao($db);
+    $culoare = new CUloareDao($db);
 
     if (isset($_GET['id_prod'])) {
         $prod = $prod_op->getById($_GET['id_prod']);
     } else
         $prod = $prod_op->getById(1);
     $prod = $prod->fetch(PDO::FETCH_ASSOC);
+
+     $stmt = $img->getByIdProd($_GET['id_prod']);
+     $stmt = $stmt->fetchAll(PDO::FETCH_ASSOC);
+     $_SESSION['images'] = $stmt;
+
+     $stmt = $marime->getByIdProd($_GET['id_prod']);
+     $stmt = $stmt->fetchAll(PDO::FETCH_ASSOC);
+     $_SESSION['sizes'] = $stmt;
+
+     $stmt = $culoare->getByIdProd($_SESSION['sizes'][0]['id_mar']);
+     $stmt = $stmt->fetchAll(PDO::FETCH_ASSOC);
+     $_SESSION['culoare'] = $stmt;
+
+     // recomendations
+     // get from db produse
+     $stmt = $prod_op->getAll();
+     $_SESSION['products'] = $stmt;
+
+     // get from db img produse
+     $stmt = $img->getAll();
+     $_SESSION['prod_img'] = $stmt;
+
+
+
+//       echo '<pre>';
+//       print_r($stmt);
+//       echo '</pre>';
 
 //     if ($prod) {
 //         echo "Name: " . htmlspecialchars($prod['den']) . "<br>";
@@ -138,6 +170,7 @@
   .color-circle.blue { background: #2a6bd6; }
   .color-circle.green { background: #3ca34d; }
   .color-circle.black { background: #222; }
+  .color-circle.white { background: #eee;}
   /* Quantity */
   input[type="number"] {
     padding: 8px;
@@ -309,38 +342,36 @@
 
 <div class="product-wrapper">
   <div class="product-image">
-    <img id="mainImage" class="main-image" src="../img/img4.jpg" alt="Running Shoe" />
+    <img id="mainImage" class="main-image" src=" <?='../'. $_SESSION['images'][0]['path'] ?>" alt="Running Shoe" />
     <div class="thumbnail-images">
-      <img src="../img/img4.jpg" alt="Red Shoe" class="selected" onclick="changeImage(this)" />
-      <img src="../img/img5.jpg" alt="Blue Shoe" onclick="changeImage(this)" />
-      <img src="../img/img3.jpg" alt="Green Shoe" onclick="changeImage(this)" />
-      <img src="../img/img1.jpg" alt="Black Shoe" onclick="changeImage(this)" />
-    </div>
+        <?php foreach ($_SESSION['images'] as $imgs): ?>
+            <img src="<?='../'. $imgs['path'] ?>" alt="Red Shoe" class="selected" onclick="changeImage(this)" />
+        <?php endforeach; ?>
+   </div>
   </div>
   <div class="product-info">
     <h1 class="product-title"><?php echo htmlspecialchars($prod['den']) ?></h1>
     <p class="product-description">
-      Lightweight and breathable running shoe designed for maximum comfort and support. Ideal for daily runs and casual wear.
+      <?php echo htmlspecialchars($prod['descriere']) ?>
+     </p>
+    <p class="product-price">
+            <?php echo htmlspecialchars($prod['pret']) ?> Lei
     </p>
-    <p class="product-price">$99.99</p>
 
     <form action="add_to_cart.php" method="POST" onsubmit="return validateSelection()">
       <label>Select Size</label>
       <div class="size-options" id="sizeOptions">
-        <button type="button" data-value="6" onclick="selectSize(this)">6</button>
-        <button type="button" data-value="7" onclick="selectSize(this)">7</button>
-        <button type="button" data-value="8" onclick="selectSize(this)">8</button>
-        <button type="button" data-value="9" onclick="selectSize(this)">9</button>
-        <button type="button" data-value="10" onclick="selectSize(this)">10</button>
+          <?php foreach ($_SESSION['sizes'] as $size): ?>
+            <button type="button" data-value="<?= $size['marime'] ?>" onclick="selectSize(this)"><?= $size['marime'] ?></button>
+          <?php endforeach; ?>
       </div>
       <input type="hidden" name="size" id="selectedSize" required />
 
       <label>Select Color</label>
       <div class="color-options" id="colorOptions">
-        <div class="color-circle red selected" data-value="Red" onclick="selectColor(this)" title="Red"></div>
-        <div class="color-circle blue" data-value="Blue" onclick="selectColor(this)" title="Blue"></div>
-        <div class="color-circle green" data-value="Green" onclick="selectColor(this)" title="Green"></div>
-        <div class="color-circle black" data-value="Black" onclick="selectColor(this)" title="Black"></div>
+          <?php foreach ($_SESSION['culoare'] as $color): ?>
+            <div class="color-circle <?= $color['culoare'] ?> " data-value="<?= $color['culoare'] ?>"  title="<?= $color['culoare'] ?>"></div>
+           <?php endforeach; ?>
       </div>
       <input type="hidden" name="color" id="selectedColor" value="Red" />
 
@@ -396,42 +427,19 @@
       </section>
 
   <section>
-          <h2>Featured Shoes</h2>
-
-          <div class="featured">
-              <a href="prod_desc.php">
-            <div class="shoe-card">
-              <img src="img/img3.jpg" alt="Classic Sneakers" />
-              <div class="shoe-info">
-                <div class="shoe-name">Classic Sneakers</div>
-                <div class="shoe-price">$79.99</div>
-              </div>
-            </div>
-            </a>
-
-            <div class="shoe-card">
-              <img src="https://images.unsplash.com/photo-1528701800489-20b6a5f8c2b6?auto=format&fit=crop&w=600&q=80" alt="Running Shoes" />
-              <div class="shoe-info">
-                <div class="shoe-name">Running Shoes</div>
-                <div class="shoe-price">$89.99</div>
-              </div>
-            </div>
-
-            <div class="shoe-card">
-              <img src="https://images.unsplash.com/photo-1528701800483-8a3a1d7ecbc1?auto=format&fit=crop&w=600&q=80" alt="Leather Boots" />
-              <div class="shoe-info">
-                <div class="shoe-name">Leather Boots</div>
-                <div class="shoe-price">$129.99</div>
-              </div>
-            </div>
-
-            <div class="shoe-card">
-              <img src="https://images.unsplash.com/photo-1519741464199-fab7b9b7f9c4?auto=format&fit=crop&w=600&q=80" alt="Casual Slip-ons" />
-              <div class="shoe-info">
-                <div class="shoe-name">Casual Slip-ons</div>
-                <div class="shoe-price">$69.99</div>
-              </div>
-            </div>
+      <h2>Featured Shoes</h2>
+        <div class="featured">
+            <?php foreach ($_SESSION['products'] as $product): ?>
+                <a href="prod_desc.php?id_prod=<?= $product['id_p'] ?>" style="all: unset; cursor: pointer;">
+                    <div class="shoe-card">
+                        <img src="../<?= (string)$img->getByIdProdMain($product['id_p'])[1] ?>" alt="<?= htmlspecialchars($product['den']) ?>" />
+                        <div class="shoe-info">
+                            <div class="shoe-name"><?= htmlspecialchars($product['den']) ?></div>
+                            <div class="shoe-price"><?= number_format($product['pret'], 2) ?> Lei</div>
+                        </div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
           </div>
         </section>
     <!-- FOOTER SECTION -->

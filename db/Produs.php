@@ -6,14 +6,16 @@
         private $categ;
         private $stil;
         private $producator;
+        private $descriere;
 
-        public function __construct($id_p, $den, $pret, $categ, $stil, $producator) {
+        public function __construct($id_p, $den, $pret, $categ, $stil, $producator,$descriere) {
             $this->id_p = $id_p;
             $this->den = $den;
             $this->pret = $pret;
             $this->categ = $categ;
             $this->stil = $stil;
             $this->producator = $producator;
+            $this->descriere = $descriere;
         }
 
     }
@@ -28,8 +30,8 @@
         }
 
         // Insert new
-        public function insert($id_p, $den, $pret, $categ, $stil, $producator) {
-            $query = "INSERT INTO " . $this->table . " (id_p, den, pret, categ, stil, producator) VALUES (:id_p, :den, :pret, :categ, stil, producator)";
+        public function insert($id_p, $den, $pret, $categ, $stil, $producator, $descriere) {
+            $query = "INSERT INTO " . $this->table . " (id_p, den, pret, categ, stil, producator, descriere) VALUES (:id_p, :den, :pret, :categ, stil, producator)";
 
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id_p', $id_p);
@@ -38,6 +40,7 @@
             $stmt->bindParam(':categ', $categ);
             $stmt->bindParam(':stil', $stil);
             $stmt->bindParam(':producator', $producator);
+            $stmt->bindParam(':descriere', $descriere);
 
             if ($stmt->execute()) {
                 return true;
@@ -46,9 +49,9 @@
         }
 
         // Update  by id
-        public function update($id_p, $den, $pret, $categ, $stil, $producator) {
+        public function update($id_p, $den, $pret, $categ, $stil, $producator, $descriere) {
             $query = "UPDATE " . $this->table . "
-                     SET den = :den, pret = :pret, categ = :categ, stil = :stil, producator = :producator
+                     SET den = :den, pret = :pret, categ = :categ, stil = :stil, producator = :producator, descriere = :descriere
                      WHERE id_p = :id_p";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id_p', $id_p);
@@ -57,6 +60,7 @@
             $stmt->bindParam(':categ', $categ);
             $stmt->bindParam(':stil', $stil);
             $stmt->bindParam(':producator', $producator);
+            $stmt->bindParam(':descriere', $descriere);
 
             if ($stmt->execute()) {
                 return true;
@@ -94,6 +98,15 @@
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id_p', $id_p);
             $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Get  like
+        public function getLike($search) {
+            $query = "SELECT * FROM " . $this->table . " WHERE den LIKE ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute(["%$search%"]);
 
             return $stmt;
         }

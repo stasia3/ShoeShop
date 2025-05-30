@@ -4,6 +4,8 @@
     include_once 'db/Img.php';
     session_start();
 
+    $search = '';
+
     $database = new Database();
     $db = $database->getConnection();
     $prod = new ProdusDao($db);
@@ -222,10 +224,12 @@
     <div class="logo">
         <img src="img/logo/logo-b.png" alt="ShoeShop Logo" style="width: 72px;">
     </div>
-    <div class="search-bar">
-        <i class="fas fa-search"></i>
-      <input type="text" placeholder="Search product or brand here..." />
-    </div>
+    <form action="app/products.php" method="GET">
+        <div class="search-bar">
+            <button type="submit" style="all: unset; cursor:pointer;"><i class="fas fa-search"></i></button>
+          <input type="text" name="q" placeholder="Search product or brand here..." value="<?= htmlspecialchars($search) ?>" />
+        </div>
+    </form>
     <div class="auth-links">
       <a href="#">
         <i class="fas fa-shopping-cart"></i>
