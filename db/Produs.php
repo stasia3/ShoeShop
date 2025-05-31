@@ -110,6 +110,15 @@
 
             return $stmt;
         }
+
+        public function getByCateg($categ) {
+            $query = "SELECT * FROM " .$this->table . " WHERE stil = :categ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':categ', $categ);
+            $stmt->execute();
+
+            return $stmt;
+        }
     }
 
 ?>

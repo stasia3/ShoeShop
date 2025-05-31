@@ -2,33 +2,74 @@
     include_once '../db/Database.php';
     include_once '../db/Produs.php';
     include_once '../db/Img.php';
+    include_once '../db/CategStil.php';
     session_start();
+
+    function sortProducts(array $products, string $key, string $order = 'asc'): array {
+        usort($products, function($a, $b) use ($key, $order) {
+            if ($a[$key] == $b[$key]) return 0;
+
+            if ($order === 'asc') {
+                return ($a[$key] < $b[$key]) ? -1 : 1;
+            } else {
+                return ($a[$key] > $b[$key]) ? -1 : 1;
+            }
+        });
+
+        return $products;
+    }
+
 
     $database = new Database();
     $db = $database->getConnection();
     $prod = new ProdusDao($db);
     $img = new ImgDao($db);
+    $categ_op = new CategSDao($db);
 
     $search = '';
     $results = [];
 
-    if (isset($_GET['q']) && !empty(trim($_GET['q']))) {
+    //get all from db produse
+    $stmt = $prod->getAll();
+    $_SESSION['products'] = $stmt->fetchAll();
+
+    // get all from db img produse
+    $stmt = $img->getAll();
+    $_SESSION['prod_img'] = $stmt;
+
+    if (isset($_GET['q']) && !empty(trim($_GET['q']))) { // search
         $search = trim($_GET['q']);
         $stmt = $prod->getLike($search);
-        $results = $stmt->fetchALl();
+        $results = $stmt->fetchAll();
+    } elseif (isset($_GET['category'])) { // category from index
+        $categ = $categ_op->getById((int) $_GET['category']);
+        $categ = $categ->fetchColumn();
+
+        $stmt = $prod->getByCateg($categ);
+        $results = $stmt->fetchAll();
+    } else {
+        $results = $_SESSION['products'];
     }
+
+    // filter
+    if (isset($_GET['order']) && !empty($_GET['order'])) { //  order
+           $results = sortProducts($results, 'pret', $_GET['order']);
+    }
+    if (isset($_GET['min_price']) || isset($_GET['max_price'])) {
+        $minPrice = isset($_GET['min_price']) ? (float)$_GET['min_price'] : 0;
+        $maxPrice = isset($_GET['max_price']) ? (float)$_GET['max_price'] : PHP_INT_MAX;
+
+        $results = array_filter($results, function ($p) use ($minPrice, $maxPrice) {
+            return $p['pret'] >= $minPrice && $p['pret'] <= $maxPrice;
+        });
+    }
+
 
 //       echo '<pre>';
 //       print_r($stmt);
 //       echo '</pre>';
 
-    //get all from db produse
-    $stmt = $prod->getAll();
-    $_SESSION['products'] = $stmt;
 
-    // get all from db img produse
-    $stmt = $img->getAll();
-    $_SESSION['prod_img'] = $stmt;
 
 //     foreach ($stmt as $row) {
 //         echo htmlspecialchars($row['path']);
@@ -147,6 +188,22 @@
               font-weight: 600;
               font-size: 1.1rem;
             }
+            .clear-btn {
+                display: inline-block;
+                padding: 1px 8px 2px 8px;
+                background-color: #f0f0f0;
+                border: 1px solid #777;
+                color: black;
+                text-decoration: none;
+                font-size: 14px;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+
+            .clear-btn:hover {
+              background-color: #e0e0e0;
+                border: 1px solid #555;
+            }
     </style>
 </head>
 <body>
@@ -157,30 +214,35 @@
 
 <div class="container">
     <aside class="sidebar">
-        <h3>Categories</h3>
-        <label><input type="checkbox"> T-shirts</label>
-        <label><input type="checkbox"> Jeans</label>
-        <label><input type="checkbox"> Jackets</label>
-        <label><input type="checkbox"> Accessories</label>
+        <form action="products.php" method="GET">
+            <h3>Categories</h3>
+            <label><input type="checkbox"> T-shirts</label>
+            <label><input type="checkbox"> Jeans</label>
+            <label><input type="checkbox"> Jackets</label>
+            <label><input type="checkbox"> Accessories</label>
 
-        <h3>Filter by Price</h3>
-        <label>Min: <input type="number" placeholder="0"></label>
-        <label>Max: <input type="number" placeholder="1000"></label>
+            <h3>Filter by Price</h3>
+            <label>Min: <input name="min_price" type="number" placeholder="0"></label>
+            <label>Max: <input name="max_price" type="number" placeholder="1000"></label>
 
-        <h3>Order By</h3>
-        <select>
-            <option>Relevance</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-            <option>Newest</option>
-        </select>
+            <h3>Order By</h3>
+            <select name="order">
+                <option value="">Select an option</option>
+                <option value="asc">Price: Low to High</option>
+                <option value="desc">Price: High to Low</option>
+            </select>
+            <button type="submit" >Apply</button>
+            <a href="products.php" class="clear-btn">Clear</a>
+        </form>
     </aside>
 
     <main class="main-content">
-        <div class="search-bar">
-            <input type="text" placeholder="Search products...">
-            <button>Search</button>
-        </div>
+        <form action="products.php" method="GET">
+            <div class="search-bar">
+                <input type="text" name="q" placeholder="Search products..." value="<?= htmlspecialchars($search) ?>">
+                <button type="submit">Search</button>
+            </div>
+        </form>
 
         <div class="products">
             <?php if (!empty($results)):

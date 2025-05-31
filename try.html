@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop - All Products</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background: #f9f9f9;
+        }
+
+        header {
+          background-color: #333;
+          color: white;
+          padding: 1rem;
+          text-align: center;
+        }
+
+        .container {
+          display: flex;
+          margin: 20px;
+        }
+
+        .sidebar {
+          width: 250px;
+          padding: 20px;
+          background: #fff;
+          box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h3 {
+          margin-top: 0;
+        }
+
+        .sidebar label,
+        .sidebar select {
+          display: block;
+          margin-bottom: 10px;
+        }
+
+        .main-content {
+          flex: 1;
+          margin-left: 20px;
+        }
+
+        .search-bar {
+          display: flex;
+          margin-bottom: 20px;
+        }
+
+        .search-bar input[type="text"] {
+          flex: 1;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-right: none;
+          border-radius: 4px 0 0 4px;
+        }
+
+        .search-bar button {
+          padding: 10px 20px;
+          border: 1px solid #ccc;
+          background-color: #333;
+          color: white;
+          border-radius: 0 4px 4px 0;
+          cursor: pointer;
+        }
+
+        .products {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 20px;
+        }
+
+        .product {
+          background: white;
+          padding: 15px;
+          border-radius: 5px;
+          box-shadow: 0 0 5px rgba(0,0,0,0.1);
+          text-align: center;
+        }
+
+        .product img {
+          width: 100%;
+          max-height: 150px;
+          object-fit: cover;
+          margin-bottom: 10px;
+        }
+
+        .product h4 {
+          margin: 10px 0 5px;
+        }
+
+        .product p {
+          margin: 0;
+          color: #666;
+        }
+
+        .footer {
+          background: #eee;
+          text-align: center;
+          padding: 10px;
+          margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>My Online Shop</h1>
+</header>
+
+<div class="container">
+    <aside class="sidebar">
+        <h3>Categories</h3>
+        <label><input type="checkbox"> T-shirts</label>
+        <label><input type="checkbox"> Jeans</label>
+        <label><input type="checkbox"> Jackets</label>
+        <label><input type="checkbox"> Accessories</label>
+
+        <h3>Filter by Price</h3>
+        <label>Min: <input type="number" placeholder="0"></label>
+        <label>Max: <input type="number" placeholder="1000"></label>
+
+        <h3>Order By</h3>
+        <select>
+            <option>Relevance</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest</option>
+        </select>
+    </aside>
+
+    <main class="main-content">
+        <div class="search-bar">
+            <input type="text" placeholder="Search products...">
+            <button>Search</button>
+        </div>
+
+        <div class="products">
+            <div class="product">
+                <img src="https://via.placeholder.com/200x150" alt="Product 1">
+                <h4>Red T-shirt</h4>
+                <p>$19.99</p>
+            </div>
+            <div class="product">
+                <img src="https://via.placeholder.com/200x150" alt="Product 2">
+                <h4>Blue Jeans</h4>
+                <p>$49.99</p>
+            </div>
+            <div class="product">
+                <img src="https://via.placeholder.com/200x150" alt="Product 3">
+                <h4>Leather Jacket</h4>
+                <p>$89.99</p>
+            </div>
+            <div class="product">
+                <img src="https://via.placeholder.com/200x150" alt="Product 4">
+                <h4>Cool Cap</h4>
+                <p>$9.99</p>
+            </div>
+            <!-- Add more products as needed -->
+        </div>
+    </main>
+</div>
+
+<div class="footer">
+    &copy; 2025 My Online Shop. All rights reserved.
+</div>
+
+</body>
+</html>

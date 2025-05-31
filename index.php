@@ -2,6 +2,7 @@
     include_once 'db/Database.php';
     include_once 'db/Produs.php';
     include_once 'db/Img.php';
+    include_once 'db/CategStil.php';
     session_start();
 
     $search = '';
@@ -10,6 +11,7 @@
     $db = $database->getConnection();
     $prod = new ProdusDao($db);
     $img = new ImgDao($db);
+    $categ = new CategSDao($db);
 
     // get from db produse
     $stmt = $prod->getAll();
@@ -18,6 +20,13 @@
     // get from db img produse
     $stmt = $img->getAll();
     $_SESSION['prod_img'] = $stmt;
+
+    $stmt = $categ->getAll();
+    $_SESSION['categ'] = $stmt->fetchAll();
+
+//     echo '<pre>';
+//         echo print_r($_SESSION['categ']);
+//         echo '</pre>';
 
 //     foreach ($stmt as $row) {
 //         echo htmlspecialchars($row['path']);
@@ -253,48 +262,16 @@
   </section>
 
   <section class="categories">
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/sport.jpg" >
-      </div>
-      <span>Sports</span>
-    </div>
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/women.jpg" >
-      </div>
-      <span>Women</span>
-    </div>
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/men.jpg" >
-      </div>
-      <span>Men</span>
-    </div>
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/kids.jpg" >
-      </div>
-      <span>Kids</span>
-    </div>
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/summer.jpg" >
-      </div>
-      <span>Summmer</span>
-    </div>
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/winter.jpg" >
-      </div>
-      <span>Winter</span>
-    </div>
-    <div class="category">
-      <div class="category-icon">
-        <img src="img/categ/other.jpg" >
-      </div>
-      <span>Others</span>
-    </div>
+      <?php foreach ($_SESSION['categ'] as $cat): ?>
+        <a href="app/products.php?category=<?= $cat['id_cs']?>" style="all: unset; cursor: pointer;">
+            <div class="category">
+              <div class="category-icon">
+                <img src="<?=$cat['path'] ?>" >
+              </div>
+              <span><?= htmlspecialchars($cat['den']) ?></span>
+            </div>
+        </a>
+      <?php endforeach; ?>
   </section>
 
   <main>
