@@ -240,7 +240,7 @@
         </div>
     </form>
     <div class="auth-links">
-      <a href="#">
+      <a href="app/cart.php">
         <i class="fas fa-shopping-cart"></i>
       </a>
       <?php if (isset($_SESSION['is_loged']) && ($_SESSION['is_loged'] === true)): ?>

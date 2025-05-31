@@ -13,6 +13,14 @@
     $marime = new MarimeDao($db);
     $culoare = new CUloareDao($db);
 
+    //doesnt work
+    if(isset($_GET['succes'])){
+        if($_GET['succes'] ==1)
+            echo "<script>alert('Product added to cart!');</script>";
+        else
+            echo "<script>alert('An error ocured. Could not add to cart!');</script>";
+    }
+
     if (isset($_GET['id_prod'])) {
         $prod = $prod_op->getById($_GET['id_prod']);
     } else
@@ -329,7 +337,7 @@
         </div>
 
         <div class="auth-links">
-          <a href="#">
+          <a href="cart.php">
             <i class="fas fa-shopping-cart"></i>
           </a>
           <?php if (isset($_SESSION['is_loged']) && ($_SESSION['is_loged'] === true)): ?>
@@ -373,14 +381,15 @@
             <div class="color-circle <?= $color['culoare'] ?> " data-value="<?= $color['culoare'] ?>"  title="<?= $color['culoare'] ?>"></div>
            <?php endforeach; ?>
       </div>
-      <input type="hidden" name="color" id="selectedColor" value="Red" />
+      <input type="hidden" name="color" id="selectedColor" value="white" />
 
       <label for="quantity">Quantity</label>
       <input type="number" id="quantity" name="quantity" min="1" value="1" required />
 
-      <input type="hidden" name="product_id" value="123" />
-      <input type="hidden" name="product_name" value="Running Shoe Model X" />
-      <input type="hidden" name="price" value="99.99" />
+      <input type="hidden" name="product_id" value="<?= htmlspecialchars($_GET['id_prod']) ?>" />
+      <input type="hidden" name="product_name" value="<?= htmlspecialchars($prod['den']) ?>" />
+      <input type="hidden" name="price" value="<?= htmlspecialchars($prod['pret']) ?>" />
+      <input type="hidden" name="id_col" value="1" />
 
       <button type="submit" class="add-to-cart">Add to Cart</button>
     </form>

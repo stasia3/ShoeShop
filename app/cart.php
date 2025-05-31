@@ -1,5 +1,24 @@
 <?php
+    include_once '../db/Database.php';
+    include_once '../db/Cos.php';
     session_start();
+
+    $database = new Database();
+    $db = $database->getConnection();
+    $cart_op = new CosDao($db);
+
+    // Initialize cart if not exists
+//     if (!isset($_SESSION['cart'])) {
+//         $_SESSION['cart'] = [];
+//     }
+    $stmt = $cart_op->getByIdUser($_SESSION['user_id']);
+    $_SESSION['cart'] = $stmt->fetchAll();
+
+//     echo "<pre>";
+//         print_r($stmt);
+//         echo "</pre>";
+
+    // read from bd
 
 //     // Remove from cart
 //     if (isset($_GET['remove'])) {
@@ -32,34 +51,29 @@
   <table>
     <thead>
       <tr>
-        <th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th>
+        <th>Product</th><th>Culoare</th><th>Marime</th><th>Quantity</th><th>Action</th>
       </tr>
     </thead>
     <tbody>
       <?php $total = 0; ?>
-      <?php foreach ($_SESSION['cart'] as $id => $qty): ?>
-        <?php
-          $product = $products[$id];
-          $subtotal = $product['price'] * $qty;
-          $total += $subtotal;
-        ?>
+      <?php foreach ($_SESSION['cart'] as $item): ?>
         <tr>
-          <td><?= htmlspecialchars($product['name']) ?></td>
-          <td>$<?= number_format($product['price'], 2) ?></td>
-          <td><?= $qty ?></td>
-          <td>$<?= number_format($subtotal, 2) ?></td>
+          <td><?= htmlspecialchars($item['id_p']) ?></td>
+          <td><?= htmlspecialchars($item['culoare']) ?></td>
+          <td><?= htmlspecialchars($item['marime']) ?></td>
+          <td><?= htmlspecialchars($item['cantitate']) ?></td>
           <td><a class="btn" href="?remove=<?= $id ?>">Remove</a></td>
         </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
 
-  <h3>Total: $<?= number_format($total, 2) ?></h3>
-<?php else: ?>
-  <p>Your cart is empty.</p>
-<?php endif; ?>
+<!--  <h3>Total: $<?= number_format($total, 2) ?></h3>
+ <?php else: ?>
+   <p>Your cart is empty.</p>
+ <?php endif; ?>-->
 
-<a href="index.php" class="back-link">Back to Products</a>
+<a href="../index.php" class="back-link">Back to Products</a>
 
 </body>
 </html>
